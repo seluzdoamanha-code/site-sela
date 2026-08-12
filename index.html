@@ -16,6 +16,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
     
+    <!-- Supabase CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
     <style>
         :root {
             /* Tema Céu Sereno (Azul Escuro) */
@@ -305,15 +308,86 @@
             border-bottom: 1px solid var(--border);
             text-align: center;
         }
-        .quote-banner h2 {
+        
+        /* Quote dynamic container */
+        .quote-container {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 40px;
+            text-align: left;
+        }
+        .quote-cover-wrapper {
+            position: relative;
+            flex-shrink: 0;
+            width: 140px;
+            height: 200px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            border: 1px solid var(--border);
+        }
+        .quote-cover-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .quote-badge {
+            position: absolute;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(251, 191, 36, 0.95);
+            color: #0f172a;
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 4px 8px;
+            border-radius: 4px;
+            white-space: nowrap;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        .quote-content {
+            flex-grow: 1;
+        }
+        .quote-text {
             font-family: 'Playfair Display', serif;
             font-style: italic;
-            font-size: 2.5rem;
+            font-size: 1.8rem;
             color: var(--primary);
             font-weight: 400;
+            line-height: 1.4;
+            margin-bottom: 16px;
+        }
+        .quote-meta {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+        .quote-book-title {
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        /* Simple quote view (Scenario A) */
+        .quote-simple {
+            text-align: center;
+        }
+        .quote-simple .quote-text {
             max-width: 800px;
             margin: 0 auto;
-            line-height: 1.4;
+        }
+
+        @media (max-width: 768px) {
+            .quote-container {
+                flex-direction: column;
+                text-align: center;
+                gap: 24px;
+            }
+            .quote-text {
+                font-size: 1.5rem;
+            }
         }
 
         /* IRRADIAÇÃO DESTAQUE */
@@ -509,8 +583,10 @@
         </section>
 
         <!-- BANNER DE CITAÇÃO -->
-        <section class="quote-banner">
-            <h2>"A verdadeira luz nasce do conhecimento aliado ao amor."</h2>
+        <section class="quote-banner" id="quoteSection">
+            <div class="quote-simple">
+                <div class="quote-text">"A verdadeira luz nasce do conhecimento aliado ao amor."</div>
+            </div>
         </section>
 
         <!-- IRRADIAÇÃO -->
@@ -598,6 +674,81 @@
                 header.classList.remove('scrolled');
             }
         });
+
+        // Inicialização do Supabase para Carregar Mensagem / Página-Luz
+        const SUPABASE_URL = 'https://aymdooyafimliiggxeqs.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF5bWRvb3lhZmltbGlpZ2d4ZXFzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUxMDUxNDksImV4cCI6MjEwMDY4MTE0OX0.-NBhiyGDlrWq4QKNLx9Ll5GlIk0mV_rBWnr0vdbUCOU';
+        const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        async function carregarMensagemOuPaginaLuz() {
+            const quoteSection = document.getElementById('quoteSection');
+            try {
+                // 50% de chance para cada módulo
+                const usarPaginaLuz = Math.random() < 0.5;
+
+                if (usarPaginaLuz) {
+                    const { data: paginas, error: errPag } = await db.from('app_pagina_luz').select('*');
+                    if (errPag) throw errPag;
+
+                    if (paginas && paginas.length > 0) {
+                        const randomPagina = paginas[Math.floor(Math.random() * paginas.length)];
+                        
+                        // Buscar info do livro no catálogo
+                        const { data: livros, error: errLivro } = await db
+                            .from('livros_catalogo')
+                            .select('titulo, capa_url, categoria')
+                            .eq('codigo', randomPagina.livro_codigo)
+                            .limit(1);
+
+                        const livro = (livros && livros.length > 0) ? livros[0] : null;
+                        const capaUrl = livro ? livro.capa_url : 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="150"><rect width="100%" height="100%" fill="%23333"/><text x="50%" y="50%" font-family="Arial" font-size="12" fill="%23777" text-anchor="middle" dominant-baseline="middle">Sem Capa</text></svg>';
+                        const disponivel = livro && livro.categoria === 'DISPONÍVEL';
+                        const badgeHtml = disponivel ? `<div class="quote-badge">📖 Empréstimo Disponível</div>` : '';
+
+                        quoteSection.innerHTML = `
+                            <div class="container quote-container">
+                                <div class="quote-cover-wrapper">
+                                    <img src="${capaUrl}" alt="Capa do Livro" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'100\\' height=\\'150\\'><rect width=\\'100%\\' height=\\'100%\\' fill=\\'%23333\\'/><text x=\\'50%\\' y=\\'50%\\' font-family=\\'Arial\\' font-size=\\'12\\' fill=\\'%23777\\' text-anchor=\\'middle\\' dominant-baseline=\\'middle\\'>Sem Capa</text></svg>'">
+                                    ${badgeHtml}
+                                </div>
+                                <div class="quote-content">
+                                    <div class="quote-text">"${randomPagina.trecho}"</div>
+                                    <div class="quote-meta">
+                                        — ${randomPagina.autor}, <span class="quote-book-title">${livro ? livro.titulo : 'Obra Desconhecida'}</span> (Pág. ${randomPagina.pagina})
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        return;
+                    }
+                }
+
+                // Carrega Mensagem-Luz (Padrão/Fallback)
+                const { data: mensagens, error: errMsg } = await db.from('app_mensagem_luz').select('*');
+                if (errMsg) throw errMsg;
+
+                if (mensagens && mensagens.length > 0) {
+                    const randomMensagem = mensagens[Math.floor(Math.random() * mensagens.length)];
+                    quoteSection.innerHTML = `
+                        <div class="quote-simple">
+                            <div class="quote-text">"${randomMensagem.texto}"</div>
+                            <p style="color: var(--text-muted); margin-top: 12px; font-style: italic; font-size: 1.1rem;">— ${randomMensagem.autor}</p>
+                        </div>
+                    `;
+                }
+            } catch (err) {
+                console.error("Erro ao carregar Mensagem/Página-Luz:", err);
+                // Citação estática padrão como fallback absoluto
+                quoteSection.innerHTML = `
+                    <div class="quote-simple">
+                        <div class="quote-text">"A verdadeira luz nasce do conhecimento aliado ao amor."</div>
+                    </div>
+                `;
+            }
+        }
+
+        // Executar carregamento ao abrir a página
+        carregarMensagemOuPaginaLuz();
     </script>
 </body>
 </html>
