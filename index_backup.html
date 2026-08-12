@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luz do Amanhã</title>
+    
+    <!-- Metatags -->
+    <meta property="og:title" content="Luz do Amanhã">
+    <meta property="og:description" content="Bem-vindo à Luz do Amanhã. Acesse nossos serviços de Irradiação e a Biblioteca.">
+    <meta property="og:image" content="https://luzdoamanha.org.br/logo_sela.png">
+    
+    <!-- Favicon (Ícone da aba) -->
+    <link rel="icon" type="image/png" href="logo_sela.png">
+    <link rel="apple-touch-icon" href="logo_sela.png">
+    
+    <!-- Fontes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-dark: #0a0a0a;
+            --card-bg: rgba(26, 26, 26, 0.7);
+            --border: rgba(255, 255, 255, 0.1);
+            --primary: #4ade80;
+            --text-main: #ffffff;
+            --text-muted: #a1a1aa;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(74, 222, 128, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 85% 30%, rgba(56, 189, 248, 0.05) 0%, transparent 50%);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+            z-index: 1;
+        }
+
+        .logo {
+            max-width: 120px;
+            margin-bottom: 24px;
+            border-radius: 50%;
+            box-shadow: 0 0 40px rgba(74, 222, 128, 0.15);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, #fff 0%, #a1a1aa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        p.subtitle {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            margin-bottom: 48px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            padding: 20px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px 24px;
+            text-decoration: none;
+            color: var(--text-main);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(180deg, rgba(255,255,255,0.05) 0%, transparent 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(255,255,255,0.2);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .card h2 {
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .footer {
+            margin-top: 60px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            opacity: 0.7;
+        }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 2rem; }
+            .cards-grid { grid-template-columns: 1fr; padding: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <img src="logo_sela.png" alt="Logo SELA" class="logo">
+        <h1>Luz do Amanhã</h1>
+        <p class="subtitle">Bem-vindo à Luz do Amanhã. Abaixo você pode dispor de alguns dos nossos serviços.</p>
+        
+        <div class="cards-grid">
+            <a href="irradiacao/index.html" class="card">
+                <span class="card-icon">✨</span>
+                <h2>Irradiação</h2>
+                <p>Faça solicitações de tratamento espiritual à distância para você ou seus entes queridos.</p>
+            </a>
+
+            <a href="biblioteca/index.html" class="card">
+                <span class="card-icon">📚</span>
+                <h2>Biblioteca</h2>
+                <p>Explore nosso acervo físico. Veja livros disponíveis para empréstimo, permuta e desiderata.</p>
+            </a>
+        </div>
+
+        <div style="margin-top: 40px;">
+            <a href="https://portal.luzdoamanha.org.br" class="card" style="max-width: 400px; margin: 0 auto; border-color: rgba(56, 189, 248, 0.3);">
+                <span class="card-icon" style="font-size: 2rem; margin-bottom: 12px;">🔒</span>
+                <h2 style="font-size: 1.2rem; color: #38bdf8;">Portal SELA</h2>
+                <p>Você trabalhador acesse nosso Portal de Atividades.</p>
+            </a>
+        </div>
+
+
+        <div class="footer">
+            &copy; 2026 Sociedade Espírita Luz do Amanhã
+        </div>
+    </div>
+
+</body>
+</html>

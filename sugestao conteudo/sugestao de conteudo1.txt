@@ -1,0 +1,57 @@
+Que ótima notícia! Como já conheço um pouco da história da Sociedade Espírita Luz do Amanhã, da Biblioteca Dilamar Abreu, do programa de incentivo à leitura, das palestras públicas e das atividades de irradiação, eu sugeriria que a página inicial transmitisse três ideias principais:
+Acolhimento • Estudo • Trabalho no Bem
+Esses três pilares representam muito bem o que vocês realizam.
+Sugestão de texto principal (Hero da página inicial)
+Título
+Luz do Amanhã: Conhecimento, Consolação e Esperança
+Subtítulo
+A Sociedade Espírita Luz do Amanhã é um espaço de estudo, acolhimento e vivência dos ensinamentos espíritas, promovendo o crescimento espiritual, a fraternidade e o serviço ao próximo.
+Botões
+	•	Conheça a Casa
+	•	Solicite Irradiação
+	•	Participe de Nossas Atividades
+
+Mensagem de boas-vindas
+Seja bem-vindo à Sociedade Espírita Luz do Amanhã.
+Aqui buscamos estudar, compreender e vivenciar os ensinamentos de Jesus à luz da Doutrina Espírita, promovendo o esclarecimento, o consolo e a transformação moral.
+Nossa Casa oferece palestras públicas, estudos doutrinários, evangelização, atividades de irradiação espiritual, atendimento fraterno e projetos voltados ao desenvolvimento humano e espiritual.
+Sinta-se convidado a conhecer nossas atividades, participar de nossos encontros e caminhar conosco na construção de um futuro mais iluminado para todos.
+
+Bloco "Nossa Missão"
+Promover o estudo e a divulgação da Doutrina Espírita, inspirando a vivência dos ensinamentos de Jesus por meio da fraternidade, do conhecimento e do trabalho no bem, contribuindo para a construção de uma sociedade mais justa, solidária e espiritualizada.
+
+Bloco "Por que visitar a Luz do Amanhã?"
+Estudo
+Aprofunde seus conhecimentos sobre a Doutrina Espírita e o Evangelho de Jesus.
+Acolhimento
+Encontre um ambiente fraterno, respeitoso e aberto ao diálogo.
+Trabalho no Bem
+Participe de atividades que promovem auxílio espiritual e crescimento pessoal.
+Biblioteca
+Conheça a Biblioteca Dilamar Abreu e descubra centenas de obras para estudo e leitura.
+
+Destaque para Irradiação Espiritual
+Precisa de uma prece? Deseja incluir alguém em nossas atividades de Irradiação Espiritual?
+Por meio de nosso formulário, você pode encaminhar seu pedido de forma simples e organizada. Além de facilitar sua solicitação, o sistema auxilia nossos trabalhadores na preparação e realização das atividades, permitindo um atendimento mais eficiente e cuidadoso.
+Estamos unidos em oração, vibrando pela paz, pelo equilíbrio e pelo fortalecimento espiritual de todos os que necessitam.
+
+Frase de destaque (efeito visual)
+Você pode usar uma faixa ou banner com algo assim:
+"Acender uma luz no conhecimento é iluminar o caminho da transformação."
+ou
+"Conhecer, compreender e servir: caminhos para um amanhã melhor."
+ou
+"A verdadeira luz nasce do conhecimento aliado ao amor."
+
+Sugestão de estrutura da página inicial
+	1	Banner principal
+	2	Boas-vindas
+	3	Próximas atividades da semana
+	4	Solicitação de Irradiação Espiritual
+	5	Biblioteca Dilamar Abreu
+	6	Programa de Incentivo à Leitura
+	7	Palestras recentes (YouTube)
+	8	Conheça a Doutrina Espírita
+	9	Como chegar
+	10	Rodapé com horários e contatos
+Uma ideia que costuma funcionar muito bem em centros espíritas é colocar logo no topo da página inicial os horários da semana, pois muitos visitantes chegam ao site apenas para descobrir "quando tem palestra" ou "quando posso visitar a casa". Isso reduz bastante o número de perguntas por WhatsApp e facilita o primeiro contato.
