@@ -34,7 +34,8 @@
                 endereco_completo: endereco,
                 data_nascimento: nascimento,
                 telefone: telefone,
-                status: 'Pendente'
+                status: 'Pendente',
+                criado_por: 'Site Externo'
             }]);
 
             if (error) throw error;
