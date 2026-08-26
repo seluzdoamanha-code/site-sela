@@ -29,21 +29,59 @@
         const telefone = document.getElementById('inTelefone').value.trim();
 
         try {
-            // 1. Criar o registro na tabela de pessoas
-            const { data: pessoaData, error: pessoaError } = await db.from('pessoas').insert([{
-                nome_completo: nome,
-                data_nascimento: nascimento,
-                celular: telefone,
-                endereco: endereco,
-                perfis: ['Paciente'],
-                status: 'Ativo'
-            }]).select();
+            let pacienteId = null;
 
-            if (pessoaError) throw pessoaError;
+            // 1. Tentar encontrar o paciente por nome e data de nascimento
+            if (nascimento) {
+                const { data: pes } = await db.from('pessoas')
+                    .select('id')
+                    .ilike('nome_completo', nome)
+                    .eq('data_nascimento', nascimento)
+                    .limit(1);
+                if (pes && pes.length > 0) pacienteId = pes[0].id;
+            }
             
-            const pacienteId = pessoaData[0].id;
+            // 2. Se não achou, tentar por nome e telefone
+            if (!pacienteId && telefone) {
+                const { data: pes2 } = await db.from('pessoas')
+                    .select('id')
+                    .ilike('nome_completo', nome)
+                    .eq('celular', telefone)
+                    .limit(1);
+                if (pes2 && pes2.length > 0) pacienteId = pes2[0].id;
+            }
 
-            // 2. Criar a solicitação de atendimento vinculando o paciente
+            // 3. Se não existe, gerar CPF provisório e criar
+            if (!pacienteId) {
+                const { data: usedData } = await db.from('pessoas').select('cpf_cnpj').like('cpf_cnpj', '111111%');
+                const usedSet = new Set(usedData ? usedData.map(d => d.cpf_cnpj ? d.cpf_cnpj.replace(/\D/g, '') : '') : []);
+                let fakeCpf = null;
+                for (let i = 1; i <= 9999; i++) {
+                    const candidate = '111111' + String(i).padStart(5, '0');
+                    if (!usedSet.has(candidate)) {
+                        fakeCpf = candidate;
+                        break;
+                    }
+                }
+                if (!fakeCpf) fakeCpf = '11111199999';
+
+                const { data: pessoaData, error: pessoaError } = await db.from('pessoas').insert([{
+                    nome_completo: nome,
+                    nome_curto: nome.split(' ')[0],
+                    data_nascimento: nascimento || null,
+                    celular: telefone,
+                    endereco: endereco,
+                    cpf_cnpj: fakeCpf,
+                    cpf_provisorio: true,
+                    perfis: ['Paciente'],
+                    status: 'Ativo'
+                }]).select('id').single();
+
+                if (pessoaError) throw pessoaError;
+                pacienteId = pessoaData.id;
+            }
+
+            // 4. Criar a solicitação de atendimento vinculando o paciente
             const { error: atendimentoError } = await db.from('app_atendimento_fraterno').insert([{
                 nome_completo: nome,
                 paciente_id: pacienteId,
