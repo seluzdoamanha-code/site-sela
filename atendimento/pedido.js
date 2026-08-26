@@ -29,16 +29,29 @@
         const telefone = document.getElementById('inTelefone').value.trim();
 
         try {
-            const { error } = await db.from('app_atendimento_fraterno').insert([{
+            // 1. Criar o registro na tabela de pessoas
+            const { data: pessoaData, error: pessoaError } = await db.from('pessoas').insert([{
                 nome_completo: nome,
-                endereco_completo: endereco,
                 data_nascimento: nascimento,
-                telefone: telefone,
+                celular: telefone,
+                endereco: endereco,
+                perfis: ['Paciente'],
+                status: 'Ativo'
+            }]).select();
+
+            if (pessoaError) throw pessoaError;
+            
+            const pacienteId = pessoaData[0].id;
+
+            // 2. Criar a solicitação de atendimento vinculando o paciente
+            const { error: atendimentoError } = await db.from('app_atendimento_fraterno').insert([{
+                nome_completo: nome,
+                paciente_id: pacienteId,
                 status: 'Pendente',
                 criado_por: 'Site Externo'
             }]);
 
-            if (error) throw error;
+            if (atendimentoError) throw atendimentoError;
 
             // Mostrar mensagem de sucesso
             document.getElementById('formAtendimento').style.display = 'none';
