@@ -52,11 +52,19 @@ document.addEventListener('DOMContentLoaded', () => {
 async function carregarContadores() {
     try {
         const fetchCount = async (catName) => {
-            const { count, error } = await db
-                .from('livros_catalogo')
-                .select('*', { count: 'exact', head: true })
-                .eq('categoria', catName);
-            return count || 0;
+            if (catName === 'DISPONÍVEL') {
+                const { count, error } = await db
+                    .from('livros_catalogo')
+                    .select('*', { count: 'exact', head: true })
+                    .in('categoria', ['DISPONÍVEL', 'EMPRESTADO']);
+                return count || 0;
+            } else {
+                const { count, error } = await db
+                    .from('livros_catalogo')
+                    .select('*', { count: 'exact', head: true })
+                    .eq('categoria', catName);
+                return count || 0;
+            }
         };
 
         const cDisp = await fetchCount('DISPONÍVEL');
@@ -98,8 +106,13 @@ async function fetchLivros(reset = false) {
 
         let query = db
             .from('livros_catalogo')
-            .select('*', { count: 'exact' })
-            .eq('categoria', currentCategoria);
+            .select('*', { count: 'exact' });
+
+        if (currentCategoria === 'DISPONÍVEL') {
+            query = query.in('categoria', ['DISPONÍVEL', 'EMPRESTADO']);
+        } else {
+            query = query.eq('categoria', currentCategoria);
+        }
             
         if (searchTerm) {
             query = query.or(`titulo.ilike.%${searchTerm}%,autor.ilike.%${searchTerm}%,codigo.ilike.%${searchTerm}%`);
@@ -129,10 +142,16 @@ async function fetchLivros(reset = false) {
             
             const noCacheUrl = `${livro.capa_url}?t=${new Date().getTime()}`;
             const codigoHtml = livro.codigo ? `<div class="book-codigo">${livro.codigo}</div>` : '';
+            
+            let tagEmprestado = '';
+            if (livro.categoria === 'EMPRESTADO') {
+                tagEmprestado = `<div style="background: #e74c3c; color: white; padding: 2px 6px; font-size: 11px; border-radius: 4px; margin-bottom: 8px; align-self: flex-start; font-weight: bold;">EMPRESTADO</div>`;
+            }
 
             card.innerHTML = `
                 <img src="${noCacheUrl}" class="book-cover" alt="Capa" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'100\\' height=\\'100\\'><rect width=\\'100%\\' height=\\'100%\\' fill=\\'%23333\\'/><text x=\\'50%\\' y=\\'50%\\' font-family=\\'Arial\\' font-size=\\'14\\' fill=\\'%23777\\' text-anchor=\\'middle\\' dominant-baseline=\\'middle\\'>Sem Capa</text></svg>'">
                 <div class="book-info">
+                    ${tagEmprestado}
                     <div class="book-title">${livro.titulo}</div>
                     <div class="book-author">${livro.autor || 'Autor desconhecido'}</div>
                     ${codigoHtml}
@@ -196,6 +215,10 @@ function abrirModal(id) {
         document.getElementById('radioDoar').checked = true;
         document.getElementById('desiderataCodigo').style.display = 'none';
         document.getElementById('desiderataCodigo').value = '';
+    } else if (livro.categoria === 'EMPRESTADO') {
+        document.getElementById('formTitle').innerText = 'Reservar este livro (Atualmente Emprestado)';
+        document.getElementById('btnConfirmarReserva').innerText = 'Entrar na Fila de Reserva';
+        document.getElementById('desiderataForm').style.display = 'none';
     } else {
         document.getElementById('formTitle').innerText = 'Reservar este livro';
         document.getElementById('btnConfirmarReserva').innerText = 'Confirmar Reserva';
